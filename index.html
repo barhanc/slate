@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Slate Image Editor</title>
+    <link
+      rel="icon" href="/slate/assets/favicon-Du_QvW7M.svg" type="image/svg+xml" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js"></script>
+    <script type="module" crossorigin src="/slate/assets/index-41i4MZ56.js"></script>
+    <link rel="stylesheet" crossorigin href="/slate/assets/index-ERFaApKL.css">
+  </head>
+  <body>
+    <!-- Layer 1: The Canvas -->
+    <div id="canvas-wrapper">
+      <canvas id="c"></canvas>
+    </div>
+
+    <!-- Layer 2: Global Top Bar -->
+    <div id="toolbar">
+      <label class="tool-btn" title="Upload Image">
+        <!-- Icon: Upload -->
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+          <polyline points="17 8 12 3 7 8"></polyline>
+          <line x1="12" y1="3" x2="12" y2="15"></line>
+        </svg>
+        <input type="file" id="imgLoader" accept="image/*" />
+      </label>
+
+      <div class="separator"></div>
+
+      <button id="btn-undo" class="tool-btn" title="Undo (Ctrl+Z)">
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M3 7v6h6"></path>
+          <path d="M21 17a9 9 0 0 0-9-9 9 9 0 0 0-6 2.3L3 13"></path>
+        </svg>
+      </button>
+
+      <button id="btn-redo" class="tool-btn" title="Redo (Ctrl+Y)">
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M21 7v6h-6"></path>
+          <path d="M3 17a9 9 0 0 1 9-9 9 9 0 0 1 6 2.3L21 13"></path>
+        </svg>
+      </button>
+
+      <div class="separator"></div>
+
+      <button id="btn-clear" class="tool-btn danger" title="Clear All">
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <polyline points="3 6 5 6 21 6"></polyline>
+          <path
+            d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"
+          ></path>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Layer 3: Context Context Bar (Floating) -->
+    <div id="context-bar">
+      <button id="ctx-eraser" class="ctx-btn" title="Eraser">
+        <svg
+          width="18"
+          height="18"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M20 20H7L3 16C2 15 2 13 3 12L13 2L22 11L18 15"></path>
+          <line x1="11" y1="11" x2="20" y2="20"></line>
+        </svg>
+      </button>
+      <button id="ctx-delete" class="ctx-btn danger" title="Delete">
+        <svg
+          width="18"
+          height="18"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+      <div class="separator"></div>
+      <button id="ctx-back" class="ctx-btn" title="Move to Back">
+        <!-- Icon: Layers / Stack -->
+        <svg
+          width="18"
+          height="18"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+          <polyline points="2 17 12 22 22 17"></polyline>
+          <polyline points="2 12 12 17 22 12"></polyline>
+        </svg>
+      </button>
+      <button id="ctx-copy" class="ctx-btn" title="Copy">
+        <svg
+          width="18"
+          height="18"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+          <path
+            d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"
+          ></path>
+        </svg>
+      </button>
+      <button id="ctx-download" class="ctx-btn" title="Download Image">
+        <svg
+          width="18"
+          height="18"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path
+            d="M3 15v4c0 1.1.9 2 2 2h14a2 2 0 0 0 2-2v-4M17 9l-5 5-5-5M12 12.8V2.5"
+          />
+        </svg>
+      </button>
+      <button id="ctx-flip-h" class="ctx-btn" title="Flip Horizontally">
+        <svg
+          width="18"
+          height="18"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M3 12h18M12 3v18M18 15l3-3-3-3M6 9l-3 3 3 3" />
+        </svg>
+      </button>
+    </div>
+
+    <div id="controls-hint">Alt + Drag: Pan Canvas</div>
+  </body>
+</html>
