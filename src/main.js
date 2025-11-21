@@ -182,6 +182,15 @@ document.getElementById("ctx-copy").onclick = () => {
   }
 };
 
+// Flip horizontally
+document.getElementById("ctx-flip-h").onclick = () => {
+  const active = canvas.getActiveObject();
+  if (active) {
+    active.set("flipX", !active.flipX);
+    canvas.requestRenderAll();
+  }
+};
+
 // Download
 document.getElementById("ctx-download").onclick = () => {
   const active = canvas.getActiveObject();
