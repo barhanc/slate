@@ -152,6 +152,7 @@ document.getElementById("ctx-back").onclick = () => {
     canvas.sendToBack(active);
     canvas.discardActiveObject(); // Refresh selection to avoid visual glitches
     canvas.requestRenderAll();
+    canvas.fire("object:modified");
   }
 };
 
@@ -166,6 +167,7 @@ document.getElementById("ctx-copy").onclick = () => {
         top: cloned.top + 20,
         evented: true,
       });
+
       if (cloned.type === "activeSelection") {
         // Active selection needs special handling
         cloned.canvas = canvas;
@@ -176,6 +178,7 @@ document.getElementById("ctx-copy").onclick = () => {
       } else {
         canvas.add(cloned);
       }
+
       canvas.setActiveObject(cloned);
       canvas.requestRenderAll();
     });
@@ -188,6 +191,7 @@ document.getElementById("ctx-flip-h").onclick = () => {
   if (active) {
     active.set("flipX", !active.flipX);
     canvas.requestRenderAll();
+    canvas.fire("object:modified");
   }
 };
 
