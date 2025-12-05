@@ -11,6 +11,7 @@ const canvas = new fabric.Canvas("c", {
 
 // Application State
 let isDragging = false;
+let isErasing = false;
 let lastPosX = 0;
 let lastPosY = 0;
 
@@ -86,11 +87,23 @@ canvas.on("mouse:up", function (opt) {
 
 function updateContextBar() {
   const activeObj = canvas.getActiveObject();
+  const contextBar = document.getElementById("context-bar");
+  const eraserBtn = document.getElementById("ctx-eraser");
 
   if (!activeObj) {
     contextBar.classList.remove("visible");
     contextBar.style.display = "none";
     return;
+  }
+
+  if (activeObj.type === "image") {
+    eraserBtn.style.opacity = "1";
+    eraserBtn.style.pointerEvents = "auto";
+    eraserBtn.style.cursor = "pointer";
+  } else {
+    eraserBtn.style.opacity = "0.3"; // Dim the button
+    eraserBtn.style.pointerEvents = "none"; // Make it unclickable
+    eraserBtn.style.cursor = "default";
   }
 
   // Calculate Position; we want it just above the object
@@ -122,13 +135,50 @@ canvas.on("object:scaling", updateContextBar);
 canvas.on("object:rotating", updateContextBar);
 canvas.on("mouse:up", updateContextBar);
 canvas.on("mouse:wheel", updateContextBar);
+canvas.on("erasing:end", updateContextBar);
 
 // -------------------------------------------------------------------
 // Context Actions
 // -------------------------------------------------------------------
 
-// TODO: Eraser
-document.getElementById("ctx-eraser").onclick = () => {};
+document.getElementById("ctx-eraser").onclick = () => {
+  const active = canvas.getActiveObject();
+  if (!active || active.type !== "image") {
+    return;
+  }
+
+  isErasing = true;
+
+  canvas.freeDrawingBrush = new fabric.EraserBrush(canvas);
+  canvas.freeDrawingBrush.width = 30;
+  canvas.isDrawingMode = true;
+
+  canvas.getObjects().forEach((obj) => {
+    obj.erasable = false;
+  });
+
+  active.hoverCursor = "crosshair";
+  active.erasable = true;
+
+  canvas.discardActiveObject();
+  canvas.requestRenderAll();
+};
+
+canvas.on("erasing:end", function (opt) {
+  if (opt.targets && opt.targets.length > 0) {
+    const target = opt.targets[0];
+
+    isErasing = false;
+    canvas.isDrawingMode = false;
+
+    canvas.defaultCursor = "default";
+    target.hoverCursor = "move";
+
+    canvas.setActiveObject(target);
+    canvas.fire("object:modified");
+    canvas.requestRenderAll();
+  }
+});
 
 // Delete
 document.getElementById("ctx-delete").onclick = () => {
