@@ -1,5 +1,5 @@
 :root {
-  --bg-color: #1a1a1a;
+  --bg-color: #2d2d2d;
   --toolbar-bg: #2d2d2d;
   --text-color: #ffffff;
   --accent-color: #646cff;
@@ -30,7 +30,7 @@ body {
   top: 20px;
   left: 50%;
   transform: translateX(-50%);
-  background-color: var(--toolbar-bg);
+  background-color: rgba(45, 45, 45, 0.9);
   padding: 6px;
   border-radius: 10px;
   display: flex;
@@ -56,22 +56,6 @@ body {
   pointer-events: auto;
 }
 
-#context-bar.visible {
-  display: flex;
-  animation: fadeIn 0.2s ease-out;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(5px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
 .separator {
   width: 1px;
   height: 24px;
@@ -83,8 +67,8 @@ body {
 /* Buttons */
 .tool-btn,
 .ctx-btn {
-  background-color: #2d2d2d;
-  border: 0px solid #555;
+  background-color: transparent;
+  border: 0px solid transparent;
   color: #e0e0e0;
   padding: 0;
   border-radius: 6px;
@@ -93,16 +77,10 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 40px;
-  height: 40px;
-}
-
-.ctx-btn {
   width: 36px;
   height: 36px;
-  background-color: transparent;
-  border: 1px solid transparent;
 }
+
 .ctx-btn:hover {
   background-color: rgba(255, 255, 255, 0.1);
   border-color: #555;
@@ -110,7 +88,7 @@ body {
 
 .tool-btn:hover {
   background-color: #505050;
-  color: #fff;
+  color: white;
 }
 
 .tool-btn.active {
@@ -140,10 +118,10 @@ input[type="file"] {
   color: #aaa;
   font-size: 13px;
   pointer-events: none;
-  background: rgba(20, 20, 20, 0.8);
+  background: rgba(45, 45, 45, 0.9);
   padding: 8px 14px;
   border-radius: 6px;
   backdrop-filter: blur(4px);
-  border: 1px solid #333;
+  border: 1px transparent;
   z-index: 10;
 }
