@@ -91,6 +91,7 @@ function updateContextBar() {
   const btns = [
     document.getElementById("ctx-eraser"),
     document.getElementById("ctx-split"),
+    document.getElementById("ctx-merge"),
   ];
 
   if (!activeObj) {
@@ -101,18 +102,34 @@ function updateContextBar() {
 
   contextBar.style.display = "flex";
 
+  // Default to disabled
+  btns.forEach((btn) => {
+    btn.style.opacity = "0.3";
+    btn.style.pointerEvents = "none";
+    btn.style.cursor = "default";
+  });
+
+  const imageOnlyBtns = [
+    document.getElementById("ctx-eraser"),
+    document.getElementById("ctx-split"),
+  ];
+
   if (activeObj.type === "image") {
-    btns.forEach((btn) => {
+    imageOnlyBtns.forEach((btn) => {
       btn.style.opacity = "1";
       btn.style.pointerEvents = "auto";
       btn.style.cursor = "pointer";
     });
-  } else {
-    btns.forEach((btn) => {
-      btn.style.opacity = "0.3";
-      btn.style.pointerEvents = "none";
-      btn.style.cursor = "default";
-    });
+  }
+
+  if (
+    activeObj.type === "activeSelection" &&
+    activeObj.getObjects("image").length > 1
+  ) {
+    const mergeBtn = document.getElementById("ctx-merge");
+    mergeBtn.style.opacity = "1";
+    mergeBtn.style.pointerEvents = "auto";
+    mergeBtn.style.cursor = "pointer";
   }
 
   // Calculate Position; we want it just above the object
@@ -159,7 +176,7 @@ document.getElementById("ctx-eraser").onclick = () => {
   isErasing = true;
 
   canvas.freeDrawingBrush = new fabric.EraserBrush(canvas);
-  canvas.freeDrawingBrush.width = 30;
+  canvas.freeDrawingBrush.width = 20;
   canvas.isDrawingMode = true;
 
   canvas.getObjects().forEach((obj) => {
@@ -195,6 +212,44 @@ document.getElementById("ctx-split").onclick = () => {
   if (active && active.type === "image") {
     splitByTransparency(active);
   }
+};
+
+// Merge selected images
+document.getElementById("ctx-merge").onclick = () => {
+  const activeSelection = canvas.getActiveObject();
+  if (!activeSelection || activeSelection.type !== "activeSelection") {
+    return;
+  }
+
+  const imagesToMerge = activeSelection.getObjects("image");
+  if (imagesToMerge.length < 2) {
+    return;
+  }
+
+  isHistoryProcessing = true; // Pause history tracking
+
+  const dataURL = activeSelection.toDataURL({});
+
+  fabric.Image.fromURL(dataURL, (mergedImage) => {
+    mergedImage.set({
+      left: activeSelection.left,
+      top: activeSelection.top,
+      originX: "left",
+      originY: "top",
+    });
+
+    // Remove the original images and the selection
+    canvas.remove(...imagesToMerge);
+
+    // Add and select the new merged image
+    canvas.add(mergedImage);
+    canvas.setActiveObject(mergedImage);
+    canvas.requestRenderAll();
+
+    // Resume history and save the new state
+    isHistoryProcessing = false;
+    saveHistory();
+  });
 };
 
 // Delete
@@ -509,6 +564,6 @@ function updateUndoRedoUI() {
 }
 
 saveHistory();
-canvas.on("object:added", saveHistory);
-canvas.on("object:modified", saveHistory);
-canvas.on("object:removed", saveHistory);
+canvas.on("object:added", () => saveHistory());
+canvas.on("object:modified", () => saveHistory());
+canvas.on("object:removed", () => saveHistory());
