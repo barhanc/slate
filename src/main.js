@@ -33,6 +33,39 @@ function resizeCanvas() {
   canvas.renderAll();
 }
 window.addEventListener("resize", resizeCanvas);
+
+// Paste from clipboard
+window.addEventListener("paste", (e) => {
+  if (e.clipboardData) {
+    const items = e.clipboardData.items;
+    if (!items) return;
+
+    for (let i = 0; i < items.length; i++) {
+      if (items[i].type.indexOf("image") !== -1) {
+        const blob = items[i].getAsFile();
+        if (!blob) continue;
+
+        const reader = new FileReader();
+        reader.onload = function (event) {
+          fabric.Image.fromURL(event.target.result, function (img) {
+            if (img.width > 800) img.scaleToWidth(800);
+            const center = canvas.getVpCenter();
+            img.set({
+              left: center.x,
+              top: center.y,
+              originX: "center",
+              originY: "center",
+            });
+            canvas.add(img);
+            canvas.setActiveObject(img);
+          });
+        };
+        reader.readAsDataURL(blob);
+      }
+    }
+  }
+});
+
 resizeCanvas();
 
 // -------------------------------------------------------------------
