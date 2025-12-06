@@ -33,11 +33,11 @@
 
     <symbol id="split" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
         stroke-linecap="round" stroke-linejoin="round">
-        <path d="M4 6v3h16v-3"></path>
+        <path d="M2 3v3h20v-3"></path>
 
-        <path d="M4 18v-3h16v3"></path>
+        <path d="M2 21v-3h20v3"></path>
 
-        <path d="M6 12h.01M9 12h.01M12 12h.01M15 12h.01M18 12h.01"></path>
+        <path d="M4 12h.01 M8 12h.01 M12 12h.01 M16 12h.01 M20 12h.01"></path>
     </symbol>
 
     <symbol id="delete" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
