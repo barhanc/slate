@@ -1,4 +1,5 @@
 import { splitByTransparency } from "./splitter.js";
+import { removeBackground } from "./remover.js";
 
 // -------------------------------------------------------------------
 // Initialization
@@ -126,6 +127,7 @@ function updateContextBar() {
   const btns = [
     document.getElementById("ctx-eraser"),
     document.getElementById("ctx-split"),
+    document.getElementById("ctx-remove-bg"),
     document.getElementById("ctx-merge"),
   ];
 
@@ -147,6 +149,7 @@ function updateContextBar() {
   const imageOnlyBtns = [
     document.getElementById("ctx-eraser"),
     document.getElementById("ctx-split"),
+    document.getElementById("ctx-remove-bg"),
   ];
 
   if (activeObj.type === "image") {
@@ -261,6 +264,48 @@ document.getElementById("ctx-split").onclick = () => {
   canvas.requestRenderAll();
   isHistoryProcessing = false;
   saveHistory();
+  saveHistory();
+};
+
+// Remove Background
+document.getElementById("ctx-remove-bg").onclick = async () => {
+  const active = canvas.getActiveObject();
+  if (!active || active.type !== "image") return;
+
+  const overlay = document.getElementById("loading-overlay");
+  overlay.style.display = "flex";
+
+  try {
+    const blob = await removeBackground(active);
+    const url = URL.createObjectURL(blob);
+
+    fabric.Image.fromURL(url, (img) => {
+      img.set({
+        left: active.left,
+        top: active.top,
+        angle: active.angle,
+        scaleX: active.scaleX,
+        scaleY: active.scaleY,
+        originX: active.originX,
+        originY: active.originY,
+      });
+
+      canvas.remove(active);
+      canvas.add(img);
+      canvas.setActiveObject(img);
+      canvas.requestRenderAll();
+      
+      // Update history
+      isHistoryProcessing = false; 
+      saveHistory();
+
+      overlay.style.display = "none";
+    });
+  } catch (err) {
+    console.error(err);
+    alert("Failed to remove background.");
+    overlay.style.display = "none";
+  }
 };
 
 // Merge selected images
