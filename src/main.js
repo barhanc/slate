@@ -519,3 +519,144 @@ saveHistory();
 canvas.on("object:added", saveHistory);
 canvas.on("object:modified", saveHistory);
 canvas.on("object:removed", saveHistory);
+
+// -------------------------------------------------------------------
+// Text Tool
+// -------------------------------------------------------------------
+
+const textModal = document.getElementById("text-modal");
+const textInput = document.getElementById("text-input");
+const btnAddText = document.getElementById("btn-add-text");
+const btnCancelText = document.getElementById("btn-cancel-text");
+const btnConfirmText = document.getElementById("btn-confirm-text");
+const btnStt = document.getElementById("btn-stt");
+
+let recognition = null;
+let isListening = false;
+
+// Initialize Speech Recognition if available
+if ("webkitSpeechRecognition" in window || "SpeechRecognition" in window) {
+  const SpeechRecognition =
+    window.SpeechRecognition || window.webkitSpeechRecognition;
+  recognition = new SpeechRecognition();
+  recognition.continuous = true;
+  recognition.interimResults = true;
+  recognition.lang = "en-US";
+
+  recognition.onresult = (event) => {
+    let finalTranscript = "";
+    let interimTranscript = "";
+
+    for (let i = event.resultIndex; i < event.results.length; i++) {
+      const transcript = event.results[i][0].transcript;
+      if (event.results[i].isFinal) {
+        finalTranscript += transcript;
+      } else {
+        interimTranscript += transcript;
+      }
+    }
+
+    // Append final transcript to existing text
+    if (finalTranscript) {
+      const currentText = textInput.value;
+      textInput.value = currentText + (currentText ? " " : "") + finalTranscript;
+    }
+  };
+
+  recognition.onerror = (event) => {
+    console.error("Speech recognition error:", event.error);
+    stopListening();
+  };
+
+  recognition.onend = () => {
+    if (isListening) {
+      // Restart if still supposed to be listening
+      recognition.start();
+    }
+  };
+} else {
+  // Hide STT button if not supported
+  btnStt.style.display = "none";
+}
+
+function startListening() {
+  if (!recognition) return;
+  isListening = true;
+  btnStt.classList.add("listening");
+  recognition.start();
+}
+
+function stopListening() {
+  if (!recognition) return;
+  isListening = false;
+  btnStt.classList.remove("listening");
+  recognition.stop();
+}
+
+// Open modal
+btnAddText.onclick = () => {
+  textInput.value = "";
+  textModal.classList.add("visible");
+  textInput.focus();
+};
+
+// Cancel
+btnCancelText.onclick = () => {
+  stopListening();
+  textModal.classList.remove("visible");
+};
+
+// Close on overlay click
+textModal.onclick = (e) => {
+  if (e.target === textModal) {
+    stopListening();
+    textModal.classList.remove("visible");
+  }
+};
+
+// Toggle STT
+btnStt.onclick = () => {
+  if (isListening) {
+    stopListening();
+  } else {
+    startListening();
+  }
+};
+
+// Confirm and add text
+btnConfirmText.onclick = () => {
+  const text = textInput.value.trim();
+  if (!text) {
+    textModal.classList.remove("visible");
+    stopListening();
+    return;
+  }
+
+  const center = canvas.getVpCenter();
+
+  const textObj = new fabric.IText(text, {
+    left: center.x,
+    top: center.y,
+    originX: "center",
+    originY: "center",
+    fontFamily: "Inter, -apple-system, BlinkMacSystemFont, sans-serif",
+    fontSize: 32,
+    fill: "#333333",
+    fontWeight: 500,
+  });
+
+  canvas.add(textObj);
+  canvas.setActiveObject(textObj);
+  canvas.requestRenderAll();
+
+  stopListening();
+  textModal.classList.remove("visible");
+};
+
+// Allow Enter key to add text (Shift+Enter for new line)
+textInput.addEventListener("keydown", (e) => {
+  if (e.key === "Enter" && !e.shiftKey) {
+    e.preventDefault();
+    btnConfirmText.click();
+  }
+});
