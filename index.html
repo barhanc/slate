@@ -44,6 +44,12 @@
 
     <!-- Layer 3: Context Context Bar (Floating) -->
     <div id="context-bar">
+      <button id="ctx-remove-bg" class="ctx-btn" data-tooltip="Remove Background (AI)">
+        <svg width="18" height="18"><use href="/icons.svg#remove-bg"></use></svg>
+      </button>
+
+      <div class="separator"></div>
+
       <button id="ctx-eraser" class="ctx-btn" data-tooltip="Eraser">
         <svg width="18" height="18"><use href="/icons.svg#eraser"></use></svg>
       </button>
@@ -52,19 +58,7 @@
         <svg width="18" height="18"><use href="/icons.svg#split"></use></svg>
       </button>
 
-      <button id="ctx-remove-bg" class="ctx-btn" data-tooltip="Remove Background (AI)">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M3 3l18 18"/>
-          <path d="M15 4.5l-4 4"/>
-          <path d="M16 9l4-4"/>
-          <path d="M12 16l4-4"/>
-          <path d="M8 20l4-4"/>
-          <rect x="3" y="3" width="18" height="18" rx="2" ry="2" style="opacity: 0.3"/>
-        </svg>
-      </button>
-
       <button id="ctx-merge" class="ctx-btn" data-tooltip="Merge Selection">
-        <!-- I'm assuming you have a 'merge' icon in your SVG sprite -->
         <svg width="18" height="18"><use href="/icons.svg#merge"></use></svg>
       </button>
 
