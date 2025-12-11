@@ -8,8 +8,8 @@
     <link rel="icon" href="/slate/favicon.svg" type="image/svg+xml" />
 
     <script src="/slate/fabric.js"></script>
-    <script type="module" crossorigin src="/slate/assets/index-Ois69wsn.js"></script>
-    <link rel="stylesheet" crossorigin href="/slate/assets/index-CZe72mKm.css">
+    <script type="module" crossorigin src="/slate/assets/index-BCb3-mEs.js"></script>
+    <link rel="stylesheet" crossorigin href="/slate/assets/index-Dq2I2cWB.css">
   </head>
 
   <body>
@@ -24,6 +24,10 @@
         <svg width="20" height="20"><use href="/slate/icons.svg#upload"></use></svg>
         <input type="file" id="imgLoader" accept="image/*" />
       </label>
+
+      <button id="btn-add-text" class="tool-btn" data-tooltip="Add Text">
+        <svg width="20" height="20"><use href="/slate/icons.svg#text"></use></svg>
+      </button>
 
       <div class="separator"></div>
 
@@ -89,6 +93,23 @@
 
     <div id="controls-hint">
       Alt + Drag: Pan Canvas | Mouse scroll: Zoom Canvas
+    </div>
+
+    <!-- Text Tool Modal -->
+    <div id="text-modal" class="modal-overlay">
+      <div class="modal-content">
+        <h3>Add Text</h3>
+        <div class="text-input-wrapper">
+          <textarea id="text-input" placeholder="Type your text here..." rows="3"></textarea>
+          <button id="btn-stt" class="stt-btn" data-tooltip="Speech to Text">
+            <svg width="20" height="20"><use href="/slate/icons.svg#microphone"></use></svg>
+          </button>
+        </div>
+        <div class="modal-actions">
+          <button id="btn-cancel-text" class="modal-btn secondary">Cancel</button>
+          <button id="btn-confirm-text" class="modal-btn primary">Add Text</button>
+        </div>
+      </div>
     </div>
 
     <!-- Loading Overlay -->
