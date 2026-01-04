@@ -12,6 +12,7 @@
     "deploy": "gh-pages -d dist"
   },
   "devDependencies": {
+    "@types/fabric": "^5.3.10",
     "vite": "^7.2.4"
   },
   "dependencies": {
