@@ -9,7 +9,7 @@ import { removeBackground as imglyRemoveBackground } from "@imgly/background-rem
 export async function removeBackground(fabricImage) {
   let src = fabricImage.getSrc();
   try {
-    const blob = await imglyRemoveBackground(src);
+    const blob = await imglyRemoveBackground(src, { model: "isnet_quint8" });
     return blob;
   } catch (error) {
     console.error("Background removal failed:", error);
