@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Slate Image Editor</title>
 
-    <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
 
     <!-- Google Fonts -->
     <link
@@ -14,8 +14,8 @@
     />
 
     <script src="coi-serviceworker.js"></script>
-    <script src="./fabric.js"></script>
-    <script type="module" crossorigin src="/slate/assets/index-DqGXZQSz.js"></script>
+    <script src="fabric.js"></script>
+    <script type="module" crossorigin src="/slate/assets/index-D25hktap.js"></script>
     <link rel="stylesheet" crossorigin href="/slate/assets/index-Bdwv5Iyp.css">
   </head>
 
@@ -27,26 +27,26 @@
     <!-- Top toolbar -->
     <div id="toolbar">
       <label class="tool-btn" data-tooltip="Upload Image">
-        <svg width="20" height="20"><use href="./icons.svg#upload"></use></svg>
+        <svg width="20" height="20"><use href="assets//icons.svg#upload"></use></svg>
         <input type="file" id="btn-upload" accept="image/*" />
       </label>
 
       <button id="btn-add-text" class="tool-btn" data-tooltip="Add Text">
-        <svg width="20" height="20"><use href="./icons.svg#text"></use></svg>
+        <svg width="20" height="20"><use href="assets//icons.svg#text"></use></svg>
       </button>
 
       <div class="separator"></div>
 
       <button id="btn-undo" class="tool-btn" data-tooltip="Undo">
-        <svg width="20" height="20"><use href="./icons.svg#undo"></use></svg>
+        <svg width="20" height="20"><use href="assets//icons.svg#undo"></use></svg>
       </button>
 
       <button id="btn-redo" class="tool-btn" data-tooltip="Redo">
-        <svg width="20" height="20"><use href="./icons.svg#redo"></use></svg>
+        <svg width="20" height="20"><use href="assets//icons.svg#redo"></use></svg>
       </button>
 
       <button id="btn-clear" class="tool-btn danger" data-tooltip="Clear All">
-        <svg width="20" height="20"><use href="./icons.svg#clear"></use></svg>
+        <svg width="20" height="20"><use href="assets//icons.svg#clear"></use></svg>
       </button>
     </div>
 
@@ -54,7 +54,7 @@
     <div id="context-bar">
       <button id="ctx-inpaint" class="ctx-btn" data-tooltip="Inpaint (AI)">
         <svg width="18" height="18">
-          <use href="./icons.svg#inpainting"></use>
+          <use href="assets//icons.svg#inpainting"></use>
         </svg>
       </button>
 
@@ -64,14 +64,14 @@
         data-tooltip="Remove Background (AI)"
       >
         <svg width="18" height="18">
-          <use href="./icons.svg#remove-bg"></use>
+          <use href="assets//icons.svg#remove-bg"></use>
         </svg>
       </button>
 
       <div class="separator"></div>
 
       <button id="ctx-eraser" class="ctx-btn" data-tooltip="Eraser">
-        <svg width="18" height="18"><use href="./icons.svg#eraser"></use></svg>
+        <svg width="18" height="18"><use href="assets//icons.svg#eraser"></use></svg>
       </button>
 
       <button
@@ -79,37 +79,37 @@
         class="ctx-btn"
         data-tooltip="Split by Transparency"
       >
-        <svg width="18" height="18"><use href="./icons.svg#split"></use></svg>
+        <svg width="18" height="18"><use href="assets//icons.svg#split"></use></svg>
       </button>
 
       <button id="ctx-merge" class="ctx-btn" data-tooltip="Merge Selection">
-        <svg width="18" height="18"><use href="./icons.svg#merge"></use></svg>
+        <svg width="18" height="18"><use href="assets//icons.svg#merge"></use></svg>
       </button>
 
       <div class="separator"></div>
 
       <button id="ctx-back" class="ctx-btn" data-tooltip="Move to Back">
-        <svg width="18" height="18"><use href="./icons.svg#layers"></use></svg>
+        <svg width="18" height="18"><use href="assets//icons.svg#layers"></use></svg>
       </button>
 
       <button id="ctx-clone" class="ctx-btn" data-tooltip="Clone">
-        <svg width="18" height="18"><use href="./icons.svg#copy"></use></svg>
+        <svg width="18" height="18"><use href="assets//icons.svg#copy"></use></svg>
       </button>
 
       <button id="ctx-flip-h" class="ctx-btn" data-tooltip="Flip Horizontally">
-        <svg width="18" height="18"><use href="./icons.svg#flip-h"></use></svg>
+        <svg width="18" height="18"><use href="assets//icons.svg#flip-h"></use></svg>
       </button>
 
       <div class="separator"></div>
 
       <button id="ctx-download" class="ctx-btn" data-tooltip="Download Image">
         <svg width="18" height="18">
-          <use href="./icons.svg#download"></use>
+          <use href="assets//icons.svg#download"></use>
         </svg>
       </button>
 
       <button id="ctx-delete" class="ctx-btn danger" data-tooltip="Delete">
-        <svg width="18" height="18"><use href="./icons.svg#delete"></use></svg>
+        <svg width="18" height="18"><use href="assets//icons.svg#delete"></use></svg>
       </button>
     </div>
 
@@ -124,7 +124,7 @@
           ></textarea>
           <button id="btn-stt" class="stt-btn" data-tooltip="Speech to Text">
             <svg width="20" height="20">
-              <use href="./icons.svg#microphone"></use>
+              <use href="assets//icons.svg#microphone"></use>
             </svg>
           </button>
         </div>
