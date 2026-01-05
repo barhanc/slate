@@ -203,7 +203,7 @@ canvas.on("path:created", async (opt) => {
 
     const overlay = document.getElementById("loading-overlay");
     overlay.style.display = "flex";
-    await delay(50); // TODO: This is a hack!
+    await delay(50); // FIXME: This is a hack!
 
     try {
         const newImage = await inpaint(target, path);
@@ -389,7 +389,7 @@ document.getElementById("ctx-split").onclick = async () => {
 
     const overlay = document.getElementById("loading-overlay");
     overlay.style.display = "flex";
-    await delay(50); // TODO: This is a hack!
+    await delay(50); // FIXME: This is a hack!
 
     try {
         const newImages = splitByTransparency(active);
@@ -520,6 +520,28 @@ document.getElementById("btn-clear").onclick = () => { if (confirm("Clear entire
 resizeCanvas();
 updateCtxBar();
 save();
+
+const startupImages = [
+    { url: "slate/assets/favicon.svg", x: 100, y: -300, width: 200 },
+    { url: "slate/assets/tutorial1.png", x: 150, y: 150, width: 600, active: true },
+    { url: "slate/assets/tutorial2.png", x: -150, y: -200, width: 400 },
+];
+
+startupImages.forEach((item) => {
+    fabric.Image.fromURL(item.url, (img) => {
+        if (!img) return console.error("Failed to load image:", item.url);
+        img.scaleToWidth(item.width);
+        img.set({
+            left: canvas.getVpCenter().x + item.x,
+            top: canvas.getVpCenter().y + item.y,
+            originX: "center",
+            originY: "center"
+        });
+        canvas.add(img);
+        if (item.active) canvas.setActiveObject(img);
+        canvas.requestRenderAll();
+    }, { crossOrigin: "anonymous" });
+});
 
 if (window.crossOriginIsolated)
     console.log("Cross-Origin Isolated: SharedArrayBuffer is enabled.");
