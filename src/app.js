@@ -33,8 +33,7 @@ function save() {
     canvasState = JSON.stringify(canvas.toJSON())
     historyRedo = [];
 
-    document.getElementById("btn-undo").disabled = historyUndo.length === 0;
-    document.getElementById("btn-redo").disabled = historyRedo.length === 0;
+    updateUndoRedoUI();
 }
 
 /**
@@ -50,8 +49,21 @@ function replay(popStack, pushStack) {
 
     canvas.loadFromJSON(canvasState, () => { canvas.renderAll(); isHistoryProcessing = false; })
 
-    document.getElementById("btn-undo").disabled = historyUndo.length === 0;
-    document.getElementById("btn-redo").disabled = historyRedo.length === 0;
+    updateUndoRedoUI()
+}
+
+function updateUndoRedoUI() {
+    const undoBtn = document.getElementById("btn-undo");
+    const redoBtn = document.getElementById("btn-redo");
+
+    undoBtn.disabled = historyUndo.length === 0;
+    redoBtn.disabled = historyRedo.length === 0;
+
+    if (undoBtn.disabled) undoBtn.style.opacity = "0.3";
+    else undoBtn.style.opacity = "1";
+
+    if (redoBtn.disabled) redoBtn.style.opacity = "0.3";
+    else redoBtn.style.opacity = "1";
 }
 
 // ========================================================
@@ -331,6 +343,8 @@ document.getElementById("ctx-remove-bg").onclick = async () => {
                 scaleY: active.scaleY,
                 originX: active.originX,
                 originY: active.originY,
+                flipX: active.flipX,
+                flipY: active.flipY,
             });
 
             canvas.add(img);
@@ -487,9 +501,13 @@ document.getElementById("btn-clear").onclick = () => { if (confirm("Clear entire
 // Startup
 // ========================================================
 
-resizeCanvas();
-updateCtxBar();
-save();
+function main() {
+    resizeCanvas();
+    updateCtxBar();
+    save();
 
-if (window.crossOriginIsolated) console.log("✅ Cross-Origin Isolated: SharedArrayBuffer is enabled.");
-else console.warn("⚠️ Cross-Origin Isolated: FALSE. Check COOP/COEP headers.");
+    if (window.crossOriginIsolated) console.log("Cross-Origin Isolated: SharedArrayBuffer is enabled.");
+    else console.warn("Cross-Origin Isolated: FALSE. Check COOP/COEP headers.");
+}
+
+main();
