@@ -25,7 +25,7 @@ class STT {
             for (let i = e.resultIndex; i < e.results.length; i++)
                 if (e.results[i].isFinal)
                     transcript += e.results[i][0].transcript;
-            
+
             const textInput = document.getElementById("text-input");
             if (transcript)
                 textInput.value = textInput.value + (textInput.value ? " " : "") + transcript;
@@ -75,6 +75,49 @@ const stt = initializeSTT();
 const canvas = window.canvas;
 
 // ========================================================
+// Font Selection
+// ========================================================
+
+const availableFonts = [
+    { name: "Anton", value: "'Anton', sans-serif" },
+    { name: "Indie Flower", value: "'Indie Flower', cursive" },
+    { name: "Londrina Outline", value: "'Londrina Outline', cursive" },
+    { name: "Patua One", value: "'Patua One', serif" },
+    { name: "Pixelify Sans", value: "'Pixelify Sans', sans-serif" },
+    { name: "Rubik Mono One", value: "'Rubik Mono One', monospace" },
+    { name: "Young Serif", value: "'Young Serif', serif" },
+    { name: "Roboto Regular", value: "'Roboto', sans-serif", weight: 400 },
+    { name: "Roboto Medium", value: "'Roboto', sans-serif", weight: 500 },
+    { name: "Roboto SemiBold", value: "'Roboto', sans-serif", weight: 600 },
+    { name: "Roboto Bold", value: "'Roboto', sans-serif", weight: 700 },
+    { name: "Roboto Black", value: "'Roboto', sans-serif", weight: 900 },
+    { name: "Roboto Italic", value: "'Roboto', sans-serif", weight: 400, style: 'italic' },
+    { name: "Roboto Med. Italic", value: "'Roboto', sans-serif", weight: 500, style: 'italic' },
+    { name: "Roboto Bold Italic", value: "'Roboto', sans-serif", weight: 700, style: 'italic' },
+    { name: "Roboto Black Italic", value: "'Roboto', sans-serif", weight: 900, style: 'italic' },
+];
+
+availableFonts.forEach(font => {
+    const option = document.createElement("option");
+    option.value = font.value;
+    option.textContent = font.name;
+    option.style.fontFamily = font.value;
+    
+    if (font.weight) {
+        option.style.fontWeight = font.weight;
+        option.setAttribute("data-weight", font.weight);
+    }
+    
+    if (font.style) {
+        option.style.fontStyle = font.style;
+        option.setAttribute("data-style", font.style);
+    }
+    
+    document.getElementById("font-select").appendChild(option);
+});
+
+
+// ========================================================
 // Event Listeners
 // ========================================================
 
@@ -95,21 +138,28 @@ document.getElementById("btn-confirm-text").onclick = () => {
 
     const textModal = document.getElementById("text-modal");
     const textInput = document.getElementById("text-input");
+    const fontSelect = document.getElementById("font-select");
+    const textColor = document.getElementById("text-color");
     const text = textInput.value.trim();
 
     textModal.classList.remove("visible");
 
     if (!text) return;
 
+    const selectedOption = fontSelect.options[fontSelect.selectedIndex];
+    const weight = selectedOption.getAttribute("data-weight");
+    const style = selectedOption.getAttribute("data-style");
+
     const textObj = new fabric.IText(text, {
         left: canvas.getVpCenter().x,
         top: canvas.getVpCenter().y,
         originX: "center",
         originY: "center",
-        fontFamily: "Inter, -apple-system, BlinkMacSystemFont, sans-serif",
+        fontFamily: fontSelect ? fontSelect.value : "Inter, -apple-system, BlinkMacSystemFont, sans-serif",
         fontSize: 32,
-        fill: "#333333",
-        fontWeight: 500,
+        fill: textColor ? textColor.value : "#333333",
+        fontWeight: weight ? parseInt(weight) : 400,
+        fontStyle: style || "normal",
     });
 
     canvas.add(textObj);

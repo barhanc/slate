@@ -321,9 +321,15 @@ input[type="file"] {
 
 .modal-actions {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
   gap: 10px;
   margin-top: 18px;
+}
+
+.modal-options {
+  display: flex;
+  gap: 10px;
+  margin-right: 52px;
 }
 
 .modal-btn {
@@ -359,4 +365,40 @@ input[type="file"] {
 
 .modal-btn.primary:active {
   transform: translateY(0);
+}
+
+#font-select {
+  background: var(--input-bg);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  color: #fff;
+  padding: 8px 12px;
+  font-size: 14px;
+  outline: none;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+#font-select option {
+  background: #333;
+  color: white;
+}
+
+#text-color {
+  appearance: none;
+  border: none;
+  width: 38px;
+  height: 38px;
+  padding: 0;
+  background: none;
+  cursor: pointer;
+}
+
+#text-color::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+
+#text-color::-webkit-color-swatch {
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
 }
