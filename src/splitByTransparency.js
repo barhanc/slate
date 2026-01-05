@@ -121,6 +121,8 @@ export function splitByTransparency(fabricImage) {
             angle: fabricImage.angle,
             scaleX: fabricImage.scaleX,
             scaleY: fabricImage.scaleY,
+            flipX: fabricImage.flipX,
+            flipY: fabricImage.flipY,
             originX: "center",
             originY: "center",
         });
