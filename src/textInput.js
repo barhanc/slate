@@ -157,7 +157,7 @@ document.getElementById("btn-confirm-text").onclick = () => {
         originY: "center",
         fontFamily: fontSelect ? fontSelect.value : "Inter, -apple-system, BlinkMacSystemFont, sans-serif",
         fontSize: 32,
-        fill: textColor ? textColor.value : "#333333",
+        fill: textColor ? textColor.value : "#ff0000",
         fontWeight: weight ? parseInt(weight) : 400,
         fontStyle: style || "normal",
     });
