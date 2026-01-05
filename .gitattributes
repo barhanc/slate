@@ -1,1 +1,3 @@
 public/fabric.js linguist-vendored
+public/coi-serviceworker.js linguist-vendored
+public/ort.webgpu.mjs linguist-vendored

@@ -1,10 +1,11 @@
 :root {
-  --bg-color: #2d2d2d;
+  --bg-color: #f0f0f0;
   --toolbar-bg: #2d2d2d;
   --text-color: #ffffff;
   --accent-color: #646cff;
   --danger-color: #d32f2f;
-  --canvas-bg: #f0f0f0;
+  --panel-bg: rgba(45, 45, 45, 0.9);
+  --input-bg: rgba(0, 0, 0, 0.3);
 }
 
 body {
@@ -24,13 +25,12 @@ body {
   background-color: var(--bg-color);
 }
 
-/* --- Top Toolbar --- */
 #toolbar {
   position: fixed;
   top: 20px;
   left: 50%;
   transform: translateX(-50%);
-  background-color: rgba(45, 45, 45, 0.9);
+  background-color: var(--panel-bg);
   padding: 6px;
   border-radius: 10px;
   display: flex;
@@ -40,17 +40,15 @@ body {
   align-items: center;
 }
 
-/* --- Context Bar (Floating) --- */
 #context-bar {
-  position: absolute; /* Positioned relative to document/window */
-  display: none; /* Hidden by default */
-  background-color: rgba(45, 45, 45, 0.9);
+  position: absolute;
+  display: none;
+  background-color: var(--panel-bg);
   padding: 6px;
   border-radius: 8px;
   gap: 6px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
   z-index: 100;
-  /* Transition for smooth movement */
   transition: opacity 0.2s;
   pointer-events: auto;
 }
@@ -117,7 +115,7 @@ input[type="file"] {
   color: #aaa;
   font-size: 13px;
   pointer-events: none;
-  background: rgba(45, 45, 45, 0.9);
+  background: var(--panel-bg);
   padding: 8px 14px;
   border-radius: 6px;
   backdrop-filter: blur(4px);
@@ -130,40 +128,36 @@ input[type="file"] {
   position: relative;
 }
 
-[data-tooltip]::before {
-  content: attr(data-tooltip);
+[data-tooltip]::before,
+[data-tooltip]::after {
   position: absolute;
-  bottom: 110%;
   left: 50%;
   transform: translateX(-50%) translateY(10px);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s, transform 0.2s;
+  pointer-events: none;
+  z-index: 1000;
+}
+
+[data-tooltip]::before {
+  content: attr(data-tooltip);
+  bottom: 110%;
   padding: 6px 10px;
   background-color: #000;
   color: white;
   font-size: 12px;
   border-radius: 4px;
   white-space: nowrap;
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.2s, transform 0.2s;
-  pointer-events: none;
-  z-index: 1000;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
 [data-tooltip]::after {
   content: "";
-  position: absolute;
-  bottom: 100%; /* Just below the text bubble */
-  left: 50%;
-  transform: translateX(-50%) translateY(10px);
+  bottom: 100%;
   border-width: 5px;
   border-style: solid;
   border-color: #000 transparent transparent transparent;
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.2s, transform 0.2s;
-  pointer-events: none;
-  z-index: 1000;
 }
 
 [data-tooltip]:hover::before,
@@ -171,6 +165,51 @@ input[type="file"] {
   opacity: 1;
   visibility: visible;
   transform: translateX(-50%) translateY(0);
+}
+
+/* Overlay Container */
+.overlay {
+  display: none; /* Toggle to 'flex' via JS */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(4px);
+  z-index: 9999;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+/* Animated Spinner */
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #ddd;
+  border-top-color: #6366f1;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+/* Text Styling */
+.loading-text {
+  margin-top: 15px;
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+  color: #333;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+
+/* Animation Keyframes */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* --- Text Tool Modal --- */
@@ -213,13 +252,6 @@ input[type="file"] {
   }
 }
 
-.modal-content h3 {
-  margin: 0 0 16px 0;
-  color: #fff;
-  font-size: 18px;
-  font-weight: 600;
-}
-
 .text-input-wrapper {
   position: relative;
   display: flex;
@@ -227,18 +259,22 @@ input[type="file"] {
   align-items: flex-start;
 }
 
-#text-input {
-  flex: 1;
-  background: rgba(0, 0, 0, 0.3);
+#text-input,
+.stt-btn {
+  background: var(--input-bg);
   border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 10px;
-  padding: 12px 14px;
   color: #fff;
+  transition: all 0.2s;
+}
+
+#text-input {
+  flex: 1;
+  padding: 12px 14px;
   font-size: 14px;
   font-family: inherit;
   resize: vertical;
   min-height: 60px;
-  transition: border-color 0.2s, box-shadow 0.2s;
 }
 
 #text-input::placeholder {
@@ -254,15 +290,10 @@ input[type="file"] {
 .stt-btn {
   width: 44px;
   height: 44px;
-  border-radius: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  background: rgba(0, 0, 0, 0.3);
-  color: #e0e0e0;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.2s;
   flex-shrink: 0;
 }
 
@@ -279,7 +310,8 @@ input[type="file"] {
 }
 
 @keyframes pulse {
-  0%, 100% {
+  0%,
+  100% {
     box-shadow: 0 0 0 0 rgba(229, 57, 53, 0.5);
   }
   50% {
@@ -289,9 +321,15 @@ input[type="file"] {
 
 .modal-actions {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
   gap: 10px;
   margin-top: 18px;
+}
+
+.modal-options {
+  display: flex;
+  gap: 10px;
+  margin-right: 52px;
 }
 
 .modal-btn {
@@ -327,4 +365,40 @@ input[type="file"] {
 
 .modal-btn.primary:active {
   transform: translateY(0);
+}
+
+#font-select {
+  background: var(--input-bg);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  color: #fff;
+  padding: 8px 12px;
+  font-size: 14px;
+  outline: none;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+#font-select option {
+  background: #333;
+  color: white;
+}
+
+#text-color {
+  appearance: none;
+  border: none;
+  width: 38px;
+  height: 38px;
+  padding: 0;
+  background: none;
+  cursor: pointer;
+}
+
+#text-color::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+
+#text-color::-webkit-color-swatch {
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
 }

@@ -5,121 +5,151 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Slate Image Editor</title>
 
-    <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="src/style.css" />
 
-    <script src="./fabric.js"></script>
-    <script type="module" src="src/main.js"></script>
+    <!-- Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Anton&family=Indie+Flower&family=Londrina+Outline&family=Patua+One&family=Pixelify+Sans&family=Roboto:ital,wght@0,400;0,500;0,600;0,700;0,900;1,400;1,500;1,700;1,900&family=Rubik+Mono+One&family=Young+Serif&display=swap"
+      rel="stylesheet"
+    />
+
+    <script src="coi-serviceworker.js"></script>
+    <script src="fabric.js"></script>
+    <script type="module" src="src/app.js"></script>
+    <script type="module" src="src/textInput.js"></script>
   </head>
 
   <body>
-    <!-- Layer 1: The Canvas -->
     <div id="canvas-wrapper">
       <canvas id="c"></canvas>
     </div>
 
-    <!-- Layer 2: Global Top Bar -->
+    <!-- Top toolbar -->
     <div id="toolbar">
       <label class="tool-btn" data-tooltip="Upload Image">
-        <svg width="20" height="20"><use href="./icons.svg#upload"></use></svg>
-        <input type="file" id="imgLoader" accept="image/*" />
+        <svg width="20" height="20"><use href="assets//icons.svg#upload"></use></svg>
+        <input type="file" id="btn-upload" accept="image/*" />
       </label>
 
       <button id="btn-add-text" class="tool-btn" data-tooltip="Add Text">
-        <svg width="20" height="20"><use href="./icons.svg#text"></use></svg>
+        <svg width="20" height="20"><use href="assets//icons.svg#text"></use></svg>
       </button>
 
       <div class="separator"></div>
 
       <button id="btn-undo" class="tool-btn" data-tooltip="Undo">
-        <svg width="20" height="20"><use href="./icons.svg#undo"></use></svg>
+        <svg width="20" height="20"><use href="assets//icons.svg#undo"></use></svg>
       </button>
 
       <button id="btn-redo" class="tool-btn" data-tooltip="Redo">
-        <svg width="20" height="20"><use href="./icons.svg#redo"></use></svg>
+        <svg width="20" height="20"><use href="assets//icons.svg#redo"></use></svg>
       </button>
 
-      <div class="separator"></div>
-
       <button id="btn-clear" class="tool-btn danger" data-tooltip="Clear All">
-        <svg width="20" height="20"><use href="./icons.svg#clear"></use></svg>
+        <svg width="20" height="20"><use href="assets//icons.svg#clear"></use></svg>
       </button>
     </div>
 
-    <!-- Layer 3: Context Context Bar (Floating) -->
+    <!-- Floating context toolbar -->
     <div id="context-bar">
-      <button id="ctx-remove-bg" class="ctx-btn" data-tooltip="Remove Background (AI)">
-        <svg width="18" height="18"><use href="./icons.svg#remove-bg"></use></svg>
+      <button id="ctx-inpaint" class="ctx-btn" data-tooltip="Inpaint (AI)">
+        <svg width="18" height="18">
+          <use href="assets//icons.svg#inpainting"></use>
+        </svg>
+      </button>
+
+      <button
+        id="ctx-remove-bg"
+        class="ctx-btn"
+        data-tooltip="Remove Background (AI)"
+      >
+        <svg width="18" height="18">
+          <use href="assets//icons.svg#remove-bg"></use>
+        </svg>
       </button>
 
       <div class="separator"></div>
 
       <button id="ctx-eraser" class="ctx-btn" data-tooltip="Eraser">
-        <svg width="18" height="18"><use href="./icons.svg#eraser"></use></svg>
+        <svg width="18" height="18"><use href="assets//icons.svg#eraser"></use></svg>
       </button>
 
-      <button id="ctx-split" class="ctx-btn" data-tooltip="Split by Transparency">
-        <svg width="18" height="18"><use href="./icons.svg#split"></use></svg>
+      <button
+        id="ctx-split"
+        class="ctx-btn"
+        data-tooltip="Split by Transparency"
+      >
+        <svg width="18" height="18"><use href="assets//icons.svg#split"></use></svg>
       </button>
 
       <button id="ctx-merge" class="ctx-btn" data-tooltip="Merge Selection">
-        <svg width="18" height="18"><use href="./icons.svg#merge"></use></svg>
+        <svg width="18" height="18"><use href="assets//icons.svg#merge"></use></svg>
       </button>
 
       <div class="separator"></div>
 
       <button id="ctx-back" class="ctx-btn" data-tooltip="Move to Back">
-        <svg width="18" height="18"><use href="./icons.svg#layers"></use></svg>
+        <svg width="18" height="18"><use href="assets//icons.svg#layers"></use></svg>
       </button>
 
-      <button id="ctx-copy" class="ctx-btn" data-tooltip="Copy">
-        <svg width="18" height="18"><use href="./icons.svg#copy"></use></svg>
+      <button id="ctx-clone" class="ctx-btn" data-tooltip="Clone">
+        <svg width="18" height="18"><use href="assets//icons.svg#copy"></use></svg>
       </button>
 
       <button id="ctx-flip-h" class="ctx-btn" data-tooltip="Flip Horizontally">
-        <svg width="18" height="18"><use href="./icons.svg#flip-h"></use></svg>
+        <svg width="18" height="18"><use href="assets//icons.svg#flip-h"></use></svg>
       </button>
 
       <div class="separator"></div>
 
       <button id="ctx-download" class="ctx-btn" data-tooltip="Download Image">
-        <svg width="18" height="18"><use href="./icons.svg#download"></use></svg>
+        <svg width="18" height="18">
+          <use href="assets//icons.svg#download"></use>
+        </svg>
       </button>
 
       <button id="ctx-delete" class="ctx-btn danger" data-tooltip="Delete">
-        <svg width="18" height="18"><use href="./icons.svg#delete"></use></svg>
+        <svg width="18" height="18"><use href="assets//icons.svg#delete"></use></svg>
       </button>
-    </div>
-
-    <div id="controls-hint">
-      Alt + Drag: Pan Canvas | Mouse scroll: Zoom Canvas
     </div>
 
     <!-- Text Tool Modal -->
     <div id="text-modal" class="modal-overlay">
       <div class="modal-content">
-        <h3>Add Text</h3>
         <div class="text-input-wrapper">
-          <textarea id="text-input" placeholder="Type your text here..." rows="3"></textarea>
+          <textarea
+            id="text-input"
+            placeholder="Type your text here..."
+            rows="3"
+          ></textarea>
           <button id="btn-stt" class="stt-btn" data-tooltip="Speech to Text">
-            <svg width="20" height="20"><use href="./icons.svg#microphone"></use></svg>
+            <svg width="20" height="20">
+              <use href="assets//icons.svg#microphone"></use>
+            </svg>
           </button>
         </div>
         <div class="modal-actions">
-          <button id="btn-cancel-text" class="modal-btn secondary">Cancel</button>
-          <button id="btn-confirm-text" class="modal-btn primary">Add Text</button>
+          <button id="btn-confirm-text" class="modal-btn primary">
+            Add Text
+          </button>
+          <div class="modal-options">
+            <input type="color" id="text-color" value="#ff0000" />
+            <select id="font-select"></select>
+          </div>
         </div>
       </div>
     </div>
 
-    <!-- Loading Overlay -->
-    <div id="loading-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255, 255, 255, 0.8); z-index: 9999; justify-content: center; align-items: center; flex-direction: column;">
-      <div class="spinner" style="width: 40px; height: 40px; border: 4px solid #ddd; border-top-color: #333; border-radius: 50%; animation: spin 1s linear infinite;"></div>
-      <p style="margin-top: 10px; font-family: sans-serif; color: #333;">Removing background...</p>
+    <!-- Footnote control hints -->
+    <div id="controls-hint">
+      Alt + Drag: Pan Canvas | Mouse scroll: Zoom Canvas | Ctrl + V: Paste Image
     </div>
 
-    <style>
-      @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-    </style>
+    <!-- Loading overlay -->
+    <div id="loading-overlay" class="overlay">
+      <div class="spinner"></div>
+      <p class="loading-text">Processing...</p>
+    </div>
   </body>
 </html>

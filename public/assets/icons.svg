@@ -9,15 +9,13 @@
 
     <symbol id="remove-bg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
         stroke-linecap="round" stroke-linejoin="round">
-        <path d="M21 3L21.7 5.5L24 6.5L21.7 7.5L21 10L20.3 7.5L18 6.5L20.3 5.5L21 3Z" fill="#333333" />
-        <path d="M4 3L4.7 5.5L7 6.5L4.7 7.5L4 10L3.3 7.5L1 6.5L3.3 5.5L4 3Z" fill="#333333" />
-        <path
-            d="M17.5 12L17.9 13.3L19.5 13.75L17.9 14.2L17.5 15.5L17.1 14.2L15.5 13.75L17.1 13.3L17.5 12Z"
-            fill="#333333" />
+        <path d="M3 1v4 M1 3h4" />
+        <path d="M21 1v4 M19 3h4" />
+        <path d="M20 16v4 M18 18h4" />
 
-        <circle cx="12" cy="10.5" r="4.5" fill="white" stroke="#333333" stroke-width="1.75" />
-        <path d="M4.5 22C4.5 17.5 8 15.5 12 15.5C16 15.5 19.5 17.5 19.5 22" stroke="#333333"
-            stroke-width="1.75" stroke-linecap="round" fill="white" />
+        <circle cx="12" cy="10.5" r="4.5" fill="white" stroke="currentColor" stroke-width="2" />
+        <path d="M4.5 22C4.5 17.5 8 15.5 12 15.5C16 15.5 19.5 17.5 19.5 22" stroke="currentColor"
+            stroke-width="2" stroke-linecap="round" fill="white" />
     </symbol>
 
     <symbol id="undo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
@@ -104,6 +102,16 @@
         <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
         <line x1="12" y1="19" x2="12" y2="23"></line>
         <line x1="8" y1="23" x2="16" y2="23"></line>
+    </symbol>
+
+    <symbol id="inpainting" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+        stroke-linecap="round" stroke-linejoin="round">
+        <path d="M4.5 19.5l14-14" />
+        <path d="M15.5 8.5l3-3" />
+
+        <path d="M19 2v4 M17 4h4" />
+        <path d="M10 3v4 M8 5h4" />
+        <path d="M22 8v4 M20 10h4" />
     </symbol>
 
 </svg>
