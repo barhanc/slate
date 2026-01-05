@@ -1,6 +1,8 @@
 import { splitByTransparency } from "./splitByTransparency.js";
 import { removeBackground } from "@imgly/background-removal";
+import { inpaint } from "./inpaint.js";
 
+const delay = (ms) => new Promise(res => setTimeout(res, ms));
 
 // ========================================================
 // Canvas Setup
@@ -177,7 +179,7 @@ canvas.on("path:created", async (opt) => {
 
     /**@type {fabric.Path} */
     const path = opt.path;
-    /**@type {fabric.Object} */
+    /**@type {fabric.Image} */
     const target = canvas.inpaintTarget;
 
     const clipper = new fabric.Rect({
@@ -201,9 +203,13 @@ canvas.on("path:created", async (opt) => {
 
     const overlay = document.getElementById("loading-overlay");
     overlay.style.display = "flex";
+    await delay(50); // TODO: This is a hack!
 
     try {
-        throw Error("Not Implemented!");
+        const newImage = await inpaint(target, path);
+        canvas.add(newImage);
+        canvas.remove(target);
+        canvas.setActiveObject(newImage);
     }
     catch (e) {
         console.error(e);
@@ -366,7 +372,7 @@ document.getElementById("ctx-eraser").onclick = () => {
     if (!active || active.type !== "image") return
 
     canvas.freeDrawingBrush = new fabric.EraserBrush(canvas);
-    canvas.freeDrawingBrush.width = 30;
+    canvas.freeDrawingBrush.width = 25;
     canvas.isDrawingMode = true;
     canvas.getObjects().forEach((obj) => { obj.erasable = false; });
 
@@ -377,17 +383,29 @@ document.getElementById("ctx-eraser").onclick = () => {
     canvas.requestRenderAll();
 };
 
-document.getElementById("ctx-split").onclick = () => {
+document.getElementById("ctx-split").onclick = async () => {
     const active = canvas.getActiveObject();
     if (!active || active.type !== "image") return;
 
-    const newImages = splitByTransparency(active);
-    if (!newImages || newImages.length === 0) return;
+    const overlay = document.getElementById("loading-overlay");
+    overlay.style.display = "flex";
+    await delay(50); // TODO: This is a hack!
 
-    newImages.forEach((img) => canvas.add(img));
-    canvas.remove(active);
-    canvas.setActiveObject(new fabric.ActiveSelection(newImages, { canvas: canvas }));
-    canvas.requestRenderAll();
+    try {
+        const newImages = splitByTransparency(active);
+        if (newImages && newImages.length > 0) {
+            newImages.forEach((img) => canvas.add(img));
+            canvas.remove(active);
+            canvas.setActiveObject(new fabric.ActiveSelection(newImages, { canvas: canvas }));
+            canvas.requestRenderAll();
+        }
+    }
+    catch (e) {
+        console.error(e);
+    }
+    finally {
+        overlay.style.display = "none";
+    }
 };
 
 document.getElementById("ctx-merge").onclick = () => {
@@ -492,22 +510,18 @@ document.getElementById("btn-add-text").onclick = () => {
 };
 
 document.getElementById("btn-undo").onclick = () => { replay(historyUndo, historyRedo) };
-
 document.getElementById("btn-redo").onclick = () => { replay(historyRedo, historyUndo) };
-
 document.getElementById("btn-clear").onclick = () => { if (confirm("Clear entire canvas?")) canvas.clear(); };
 
 // ========================================================
 // Startup
 // ========================================================
 
-function main() {
-    if (window.crossOriginIsolated) console.log("Cross-Origin Isolated: SharedArrayBuffer is enabled.");
-    else console.warn("Cross-Origin Isolated: FALSE. Check COOP/COEP headers.");
-    
-    resizeCanvas();
-    updateCtxBar();
-    save();
-}
+resizeCanvas();
+updateCtxBar();
+save();
 
-main();
+if (window.crossOriginIsolated)
+    console.log("Cross-Origin Isolated: SharedArrayBuffer is enabled.");
+else
+    console.warn("Cross-Origin Isolated: FALSE. Check COOP/COEP headers.");
