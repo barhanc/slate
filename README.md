@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="public/favicon.svg" alt="Slate logo" width="100">
+  <img src="public/assets/favicon.svg" alt="Slate logo" width="100">
   <h1>Slate</h1>
   <p>A simple, open, AI-powered image editor built with Fabric.js.</p>
 </div>
