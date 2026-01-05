@@ -69,18 +69,34 @@ function uploadImage(file) {
     if (!file || !file.type.startsWith("image/")) return;
 
     const url = URL.createObjectURL(file);
+    const imgElement = new Image();
+    imgElement.src = url;
 
-    fabric.Image.fromURL(url, (img) => {
-        const center = canvas.getVpCenter();
+    imgElement.onload = () => {
         const maxWidth = 600;
+        const scale = Math.min(1, maxWidth / imgElement.width);
 
-        if (img.width > maxWidth) img.scaleToWidth(maxWidth);
-        img.set({ left: center.x, top: center.y, originX: "center", originY: "center" });
+        const offScreenCanvas = document.createElement('canvas');
+        offScreenCanvas.width = imgElement.width * scale;
+        offScreenCanvas.height = imgElement.height * scale;
 
-        canvas.add(img);
-        canvas.setActiveObject(img);
-    })
+        const ctx = offScreenCanvas.getContext('2d');
+        ctx.imageSmoothingEnabled = true;
+        ctx.imageSmoothingQuality = 'high';
+        ctx.drawImage(imgElement, 0, 0, offScreenCanvas.width, offScreenCanvas.height);
 
+        const resizedImage = new fabric.Image(offScreenCanvas, {
+            left: canvas.getVpCenter().x,
+            top: canvas.getVpCenter().y,
+            originX: "center",
+            originY: "center"
+        });
+
+        canvas.add(resizedImage);
+        canvas.setActiveObject(resizedImage);
+        
+        URL.revokeObjectURL(url);
+    };
 }
 
 function updateCtxBar() {
@@ -151,7 +167,7 @@ canvas.on("path:created", async (opt) => {
     const path = opt.path;
     /**@type {fabric.Object} */
     const target = canvas.inpaintTarget;
-    
+
     const clipper = new fabric.Rect({
         left: target.left,
         top: target.top,
