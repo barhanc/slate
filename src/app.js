@@ -1,6 +1,6 @@
-import { inpaint } from "./inpaint.js";
 import { splitByTransparency } from "./splitByTransparency.js";
 import { removeBackground } from "@imgly/background-removal";
+import { inpaint } from "./inpaint.js";
 
 // ========================================================
 // Canvas Setup
@@ -193,8 +193,8 @@ canvas.on("path:created", async (opt) => {
     try {
         throw Error("Not Implemented!");
     }
-    catch (err) {
-        console.error(err);
+    catch (e) {
+        console.error(e);
         canvas.setActiveObject(target);
     }
     finally {
@@ -299,7 +299,7 @@ document.getElementById("ctx-inpaint").onclick = () => {
     if (!active || active.type !== "image") return;
 
     canvas.freeDrawingBrush = new fabric.PencilBrush(canvas);
-    canvas.freeDrawingBrush.width = 20;
+    canvas.freeDrawingBrush.width = 25;
     canvas.freeDrawingBrush.color = "#6365f17a";
     canvas.isDrawingMode = true;
     canvas.inpaintTarget = active;
@@ -339,8 +339,8 @@ document.getElementById("ctx-remove-bg").onclick = async () => {
             canvas.requestRenderAll();
         });
     }
-    catch (err) {
-        console.error(err);
+    catch (e) {
+        console.error(e);
     }
     finally {
         overlay.style.display = "none";
@@ -352,7 +352,7 @@ document.getElementById("ctx-eraser").onclick = () => {
     if (!active || active.type !== "image") return
 
     canvas.freeDrawingBrush = new fabric.EraserBrush(canvas);
-    canvas.freeDrawingBrush.width = 20;
+    canvas.freeDrawingBrush.width = 30;
     canvas.isDrawingMode = true;
     canvas.getObjects().forEach((obj) => { obj.erasable = false; });
 
