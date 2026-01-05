@@ -1,12 +1,11 @@
 import { splitByTransparency } from "./splitByTransparency.js";
 import { removeBackground } from "@imgly/background-removal";
-import { inpaint } from "./inpaint.js";
 
 // ========================================================
 // Canvas Setup
 // ========================================================
 
-const canvas = new fabric.Canvas("c", { selection: true, preserveObjectStacking: true });
+const canvas = window.canvas = new fabric.Canvas("c", { selection: true, preserveObjectStacking: true });
 canvas.isDragging = false;
 canvas.lastPosX = 0;
 canvas.lastPosY = 0;
@@ -70,7 +69,6 @@ function uploadImage(file) {
 
     const url = URL.createObjectURL(file);
     const imgElement = new Image();
-    imgElement.src = url;
 
     imgElement.onload = () => {
         const maxWidth = 600;
@@ -94,9 +92,10 @@ function uploadImage(file) {
 
         canvas.add(resizedImage);
         canvas.setActiveObject(resizedImage);
-        
+
         URL.revokeObjectURL(url);
     };
+    imgElement.src = url;
 }
 
 function updateCtxBar() {
@@ -465,8 +464,16 @@ document.getElementById("ctx-download").onclick = () => {
 
 document.getElementById("btn-upload").onchange = (e) => {
     if (!e.target || !e.target.files) return;
-    for (const file of e.target.files)
-        uploadImage(file)
+    for (const file of e.target.files) {
+        uploadImage(file);
+        e.target.value = "";
+    }
+};
+
+document.getElementById("btn-add-text").onclick = () => {
+    document.getElementById("text-input").value = "";
+    document.getElementById("text-modal").classList.add("visible");
+    document.getElementById("text-input").focus();
 };
 
 document.getElementById("btn-undo").onclick = () => { replay(historyUndo, historyRedo) };
