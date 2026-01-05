@@ -522,9 +522,9 @@ updateCtxBar();
 save();
 
 const startupImages = [
-    { url: "slate/assets/favicon.svg", x: 100, y: -300, width: 200 },
-    { url: "slate/assets/tutorial1.png", x: 150, y: 150, width: 600, active: true },
-    { url: "slate/assets/tutorial2.png", x: -150, y: -200, width: 400 },
+    { url: "./assets/favicon.svg", x: 100, y: -300, width: 200 },
+    { url: "./assets/tutorial1.png", x: 150, y: 150, width: 600, active: true },
+    { url: "./assets/tutorial2.png", x: -150, y: -200, width: 400 },
 ];
 
 startupImages.forEach((item) => {
