@@ -502,12 +502,12 @@ document.getElementById("btn-clear").onclick = () => { if (confirm("Clear entire
 // ========================================================
 
 function main() {
+    if (window.crossOriginIsolated) console.log("Cross-Origin Isolated: SharedArrayBuffer is enabled.");
+    else console.warn("Cross-Origin Isolated: FALSE. Check COOP/COEP headers.");
+    
     resizeCanvas();
     updateCtxBar();
     save();
-
-    if (window.crossOriginIsolated) console.log("Cross-Origin Isolated: SharedArrayBuffer is enabled.");
-    else console.warn("Cross-Origin Isolated: FALSE. Check COOP/COEP headers.");
 }
 
 main();
