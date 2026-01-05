@@ -1,6 +1,7 @@
 import { splitByTransparency } from "./splitByTransparency.js";
 import { removeBackground } from "@imgly/background-removal";
 
+
 // ========================================================
 // Canvas Setup
 // ========================================================
@@ -489,3 +490,6 @@ document.getElementById("btn-clear").onclick = () => { if (confirm("Clear entire
 resizeCanvas();
 updateCtxBar();
 save();
+
+if (window.crossOriginIsolated) console.log("✅ Cross-Origin Isolated: SharedArrayBuffer is enabled.");
+else console.warn("⚠️ Cross-Origin Isolated: FALSE. Check COOP/COEP headers.");
