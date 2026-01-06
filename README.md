@@ -4,7 +4,7 @@
   <p>A simple, open, AI-powered image editor built with Fabric.js.</p>
 </div>
 
-
+![](media/demo.gif)
 
 ## Dev
 
