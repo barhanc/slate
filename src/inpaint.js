@@ -45,7 +45,7 @@ async function runInference(imageData, maskData) {
     const results = await session.run({ image: imageTensor, mask: maskTensor });
 
     /**@type {Float32Array} */
-    const outputData = results.output.cpuData;
+    const outputData = results.output.data;
 
     console.log("Inference successful:", outputData);
     return outputData;
@@ -75,7 +75,7 @@ export async function inpaint(target, path) {
     const maskCanvas = document.createElement('canvas');
     maskCanvas.width = width;
     maskCanvas.height = height;
-    const fMaskCanvas = new fabric.StaticCanvas(maskCanvas);
+    const fMaskCanvas = new fabric.StaticCanvas(maskCanvas, { enableRetinaScaling: false });
 
     // Calculate transform: Global Canvas -> Local Image -> dimxdim
     const invTargetMatrix = fabric.util.invertTransform(target.calcTransformMatrix());
