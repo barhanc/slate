@@ -525,7 +525,6 @@ const startupImages = [
     { url: "./assets/favicon.svg", x: 100, y: -300, width: 200 },
     { url: "./assets/tutorial1.png", x: 150, y: 150, width: 600, active: true },
     { url: "./assets/tutorial2.png", x: -150, y: -200, width: 400 },
-    { url: "./assets/tutorial3.png", x: 170, y: 150, width: 600, sendToBack: true },
 ];
 
 startupImages.forEach((item) => {
